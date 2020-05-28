@@ -1,26 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Register } from './register';
+import { AuthContext } from './helpers/auth.context';
+import { useAuth } from './helpers/auth.hook';
+import { Account } from './lk';
+import { SendUpMoney } from './sendUpMoney';
+import { Login } from './login';
+import { Admin } from './admin';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const { userName, isAuth, login, logout } = useAuth();
+    return (
+        <AuthContext.Provider value={{ userName, isAuth, login, logout }}>
+            <div>
+                <Admin />
+                <SendUpMoney />
+                <Login />
+                <Account />
+                <Register />
+            </div>
+        </AuthContext.Provider>
+    );
 }
 
 export default App;
