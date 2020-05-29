@@ -2,13 +2,18 @@ import { useState, useCallback } from 'react';
 
 export const useAuth = () => {
     const [isAuth, setAuth] = useState(false);
-    const [userName, setUsername] = useState('');
-    const login = useCallback((name) => {
+    const [user, setUser] = useState({ id: '', name: '' });
+    const login = useCallback((user) => {
+        console.log('Cigan-log: login -> user', user);
         setAuth(true);
-        setUsername(name);
+        setUser(user);
     }, []);
     const logout = useCallback(() => {
         setAuth(false);
+        setUser({ id: '', name: '' });
     }, []);
-    return { userName, isAuth, login, logout };
+    const changeBalance = useCallback((newBalance) => {
+        setUser({ ...user, balance: newBalance });
+    });
+    return { user, isAuth, login, logout, changeBalance };
 };

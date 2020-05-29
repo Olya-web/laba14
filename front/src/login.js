@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { API } from './helpers/API';
+import { AuthContext } from './helpers/auth.context';
 
 export const Login = () => {
     const [loginForm, setLoginForm] = useState({
@@ -7,10 +8,16 @@ export const Login = () => {
         password: '',
     });
 
+    const { user, login } = useContext(AuthContext);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const r = await API.post('auth/signin/', loginForm);
-        console.log('Cigan-log: handleSubmit -> r', r);
+        const r = await API.post('auth/signin', loginForm);
+        console.log('Cigan-log: handleSubmit -> r', r.data);
+        if (r.data.result) {
+            login(r.data.user);
+            alert('Success');
+        } else alert('Invalid credentials');
     };
 
     return (
@@ -32,6 +39,7 @@ export const Login = () => {
                     setLoginForm({ ...loginForm, password: e.target.value })
                 }
             />
+            <button type="submit">login</button>
         </form>
     );
 };

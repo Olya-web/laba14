@@ -3,8 +3,9 @@ import { createContext } from 'react';
 function noop() {}
 
 export const AuthContext = createContext({
-    userName: '',
+    user: { id: '', name: '' },
     isAuth: false,
     login: noop(),
     logout: noop(),
+    changeBalance: noop(),
 });

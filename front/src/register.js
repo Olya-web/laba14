@@ -35,7 +35,10 @@ export const Register = () => {
                 alert('Пароли не совпадают');
             } else {
                 const r = await API.post('auth/signup', registerForm);
-                console.log('Cigan-log: handleSubmit -> r', r.data);
+                if (r.data) alert('Пользователь создан');
+                else alert('Произошла ошибка');
+                setRegisterForm({ name: '', password: '' });
+                setRepeatPassword('');
             }
         } else alert('Только латинские буквы и цифры, мин длина 6 символов');
     };

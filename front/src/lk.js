@@ -3,7 +3,7 @@ import { API } from './helpers/API';
 import { AuthContext } from './helpers/auth.context';
 
 export const Account = () => {
-    const { userName } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [changePasswordForm, setChangePasswordForm] = useState({
         oldPassword: '',
         newPassword: '',
@@ -16,19 +16,27 @@ export const Account = () => {
             return;
         }
 
-        const r = await API.post('auth/changepassword', changePasswordForm);
-        console.log('Cigan-log: handleSubmit -> r', r.data);
+        const r = await API.put(`auth/password/${user.id}`, changePasswordForm);
+        if (r.data.result) alert('Пароль успешно изменён');
+        else alert('Старый пароль не подходит');
     };
 
     const deleteAccount = async () => {
-        const r = await API.delete(`auth/${userName}`);
-        console.log('Cigan-log: deleteAccount -> r', r.data);
+        console.log('Cigan-log: deleteAccount -> user.id', user.id);
+        const r = await API.delete(`auth/${user.id}`);
+        console.log('Cigan-log: deleteAccount -> r', r);
+        if (r.data.result) {
+            alert('Ваш аккаунт был удалён');
+            logout();
+        } else {
+            alert('Произошла ошибка');
+        }
     };
 
     return (
         <div>
             <form onSubmit={(e) => handleSubmit(e)}>
-                <h3>LK</h3>
+                <h3>LK, Приветствуем Вас: {user.username}</h3>
                 <input
                     type="text"
                     placeholder="old password"
@@ -60,6 +68,7 @@ export const Account = () => {
                 <button type="submit">submit</button>
             </form>
             <button onClick={(e) => deleteAccount()}>remove account</button>
+            <button onClick={(e) => logout()}>Logout</button>
         </div>
     );
 };
